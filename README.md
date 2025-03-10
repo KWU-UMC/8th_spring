@@ -1,7 +1,7 @@
 # 8th_spring
 
 ## 🪵 UMC Github 과제 세팅 가이드
-[광운대 UMC Github 과제 세팅 가이드](https://www.notion.so/UMC-Github-1b2c4c18d97180e39dfae542b6dd3b94?pvs=4) 확인하러 가기
+[광운대 UMC Github 과제 세팅 가이드](https://www.notion.so/UMC-Github-1b29768e77fe808b8f6beb1fde5a2731?pvs=4) 확인하러 가기
 
 [깃허브 기본 가이드](https://www.notion.so/makeus-challenge/Github-aaa7f52c9fa64656b4e4ea02de51a0a9?pvs=4) 확인하러 가기
 
