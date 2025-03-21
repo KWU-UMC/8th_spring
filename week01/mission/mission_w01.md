@@ -1,6 +1,6 @@
 - **미션 기록**
 
-  ![umc 1주차 미션.png](attachment:2b6b3060-a29e-4181-9fa9-b232e79cf5fa:08d0a8b0-9128-4a02-b301-020b0f844147.png)
+![umc 1주차 미션.png](umc%201%EC%A3%BC%EC%B0%A8%20%EB%AF%B8%EC%85%98.png)
 
     1. ERD 설계
         - 관계 고려
@@ -19,8 +19,7 @@
 
         - id들은 모두 확장성을 고려하여 bigint 타입으로 둠.
 
-  ![image.png](attachment:0638bcfa-3d10-4dec-ad0c-2879f77347ae:image.png)
-
+  ![1주차 미션 2.png](1%EC%A3%BC%EC%B0%A8%20%EB%AF%B8%EC%85%98%202.png)
     1. 테이블 생성
         - sql문
 
