@@ -6,7 +6,7 @@
   </component>
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
@@ -19,26 +19,138 @@
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c">
-      <console name="Connection" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection" type="STANDARD" schema="cookdb" session="Main"><![CDATA[CREATE TABLE user (
+    id BIGINT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    gender VARCHAR(10) NULL,
+    birth DATE NULL,
+    address VARCHAR(100) NULL,
+    email VARCHAR(30) NULL,
+    created_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    point INT NULL,
+    CONSTRAINT PK_USER PRIMARY KEY (id)
+);
+
+CREATE TABLE mission (
+    id BIGINT NOT NULL,
+    store_id BIGINT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    description VARCHAR(50) NULL,
+    CONSTRAINT PK_MISSION PRIMARY KEY (id, store_id)
+);
+
+CREATE TABLE genre (
+    id BIGINT NOT NULL,
+    name VARCHAR(36) NOT NULL,
+    CONSTRAINT PK_GENRE PRIMARY KEY (id)
+);
+
+CREATE TABLE user_genre (
+    user_id BIGINT NOT NULL,
+    genre_id BIGINT NOT NULL,
+    CONSTRAINT PK_USER_GENRE PRIMARY KEY (user_id, genre_id)
+);
+
+CREATE TABLE user_mission (
+    user_id BIGINT NOT NULL,
+    mission_id BIGINT NOT NULL,
+    status VARCHAR(15) NOT NULL,
+    created_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    CONSTRAINT PK_USER_MISSION PRIMARY KEY (user_id, mission_id)
+);
+
+CREATE TABLE review (
+    user_id BIGINT NOT NULL,
+    store_id BIGINT NOT NULL,
+    score VARCHAR(10) NULL,
+    description VARCHAR(500) NULL,
+    photo_url VARCHAR(255) NULL,
+    CONSTRAINT PK_REVIEW PRIMARY KEY (user_id, store_id)
+);
+
+CREATE TABLE region (
+    id BIGINT NOT NULL,
+    region_name VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_REGION PRIMARY KEY (id)
+);
+
+CREATE TABLE store (
+    id BIGINT NOT NULL,
+    region_id BIGINT NOT NULL,
+    store_name VARCHAR(20) NOT NULL,
+    store_address VARCHAR(100) NULL,
+    CONSTRAINT PK_STORE PRIMARY KEY (id, region_id)
+);
+
+ALTER TABLE mission 
+ADD CONSTRAINT FK_store_TO_mission_1 FOREIGN KEY (store_id) 
+REFERENCES store (id);
+
+ALTER TABLE user_genre 
+ADD CONSTRAINT FK_user_TO_user_genre_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE user_genre 
+ADD CONSTRAINT FK_genre_TO_user_genre_1 FOREIGN KEY (genre_id) 
+REFERENCES genre (id);
+
+ALTER TABLE user_mission 
+ADD CONSTRAINT FK_user_TO_user_mission_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE user_mission 
+ADD CONSTRAINT FK_mission_TO_user_mission_1 FOREIGN KEY (mission_id) 
+REFERENCES mission (id);
+
+ALTER TABLE review 
+ADD CONSTRAINT FK_user_TO_review_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE review 
+ADD CONSTRAINT FK_store_TO_review_1 FOREIGN KEY (store_id) 
+REFERENCES store (id);
+
+ALTER TABLE store 
+ADD CONSTRAINT FK_region_TO_store_1 FOREIGN KEY (region_id) 
+REFERENCES region (id);]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Connection" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" />
   </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" dataset="mysql.genre" active-filter-id="" />
+    <filter-actions connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" dataset="cookdb.genre" active-filter-id="" />
+    <filter-actions connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" dataset="cookdb.mission" active-filter-id="" />
+    <filter-actions connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" dataset="mysql.user_genre" active-filter-id="" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
+  <component name="DBNavigator.Project.FileConnectionMappingManager">
+    <mapping file-url="file://$USER_HOME$/Downloads/umc 1주차 미션 (1).sql" connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" session-id="MAIN" current-schema="cookdb" />
+  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
+  </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
@@ -106,7 +218,7 @@
           <tcp-port-to value="4999" />
           <debugger-type value="ASK" />
         </debugger>
-        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+        <object-filters hide-empty-schemas="true" hide-pseudo-columns="false" hide-audit-columns="false">
           <object-filters />
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />
@@ -556,5 +668,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>
