@@ -142,9 +142,6 @@ REFERENCES region (id);]]></console>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
   </component>
-  <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$USER_HOME$/Downloads/umc 1주차 미션 (1).sql" connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" session-id="MAIN" current-schema="cookdb" />
-  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
