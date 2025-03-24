@@ -30,15 +30,8 @@
 2. 리뷰 작성하는 쿼리 (* 사진의 경우는 일단 배제)
 
     ```jsx
-    SELECT 
-        m.name AS member_name,
-        r.score,
-        r.body,
-        r.created_at
-    FROM review AS r
-    JOIN member AS m ON r.member_id = m.id
-    WHERE r.store_id = {선택한 가게 ID}
-    ORDER BY r.created_at DESC // 최신순 정렬
+   INSERT INTO review (member_id, store_id, score, body, created_at)
+   VALUES ('사용자 id', '가게 id', 5, '음 너무 맛있어요 포인트도 얻고 맛있는 맛집도 알게 된 것 같아 너무나도 행복한 식사였답니다. 다음에 또 올께요!!', NOW());
     ```
 
 3. **홈 화면 쿼리(현재 선택 된 지역에서 도전이 가능한 미션 목록, 페이징 포함)**
