@@ -1,0 +1,1 @@
+https://www.notion.so/makeus-challenge/Chapter-1-Database-1b8b57f4596b80b28813e60712ed26f5
