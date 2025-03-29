@@ -24,7 +24,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c">
-      <console name="Connection" type="STANDARD" schema="cookdb" session="Main"><![CDATA[CREATE TABLE user (
+      <console name="Chapter1" type="STANDARD" schema="cookdb" session="Main"><![CDATA[CREATE TABLE user (
     id BIGINT NOT NULL,
     name VARCHAR(30) NOT NULL,
     gender VARCHAR(10) NULL,
@@ -120,6 +120,41 @@ REFERENCES store (id);
 ALTER TABLE store 
 ADD CONSTRAINT FK_region_TO_store_1 FOREIGN KEY (region_id) 
 REFERENCES region (id);]]></console>
+      <console name="Chapter2" type="STANDARD" schema="mysql" session="Main"><![CDATA[SELECT *
+FROM mission as m
+JOIN user_mission AS um ON m.id = um.mission_id
+WHERE um.user_id = 7
+AND(um.status = '진행중' OR um.status = '진행완료')
+ORDER BY um.created_at desc, m.id desc limit 15;
+LIMIT 15 OFFSET 0;
+--내가 진행중, 진행 완료한 미션 모아서 보는 쿼리(페이징 포함)
+
+INSERT INTO review (user_id, store_id, score, description)
+VALUES (
+(SELECT id FROM user WHERE name = '닉네임1234'), 
+1,                                           
+'5',                                        
+'음 너무 맛있어요 포인트도 얻고 맛있는 맛집도 알게 된 것 같아 너무나도 행복한 식사였답니다. 다음에 또 올게요!!'                
+);
+--리뷰 작성하는 쿼리,
+--* 사진의 경우는 일단 배제
+
+SELECT m.*, s.store_name 
+FROM mission AS m
+JOIN store AS s ON m.store_id = s.id
+LEFT JOIN user_mission AS um ON m.id = um.mission_id AND um.user_id = 7 
+WHERE s.region_id = 1 
+AND um.user_id IS NULL
+ORDER BY m.id DESC
+LIMIT 15 OFFSET 0;
+--홈 화면 쿼리
+--(현재 선택 된 지역에서 도전이 가능한 미션 목록, 페이징 포함)
+      
+      
+SELECT name, email, point
+FROM user
+WHERE id = 7;
+-- 마이페이지 화면 쿼리]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -127,7 +162,8 @@ REFERENCES region (id);]]></console>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Connection" />
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter1" />
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter2" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -141,9 +177,6 @@ REFERENCES region (id);]]></console>
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
-  </component>
-  <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$USER_HOME$/Downloads/umc 1주차 미션 (1).sql" connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" session-id="MAIN" current-schema="cookdb" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
