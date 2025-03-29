@@ -57,4 +57,10 @@ LIMIT 15 OFFSET 0;
 ## 4. **마이페이지 정보 조회 쿼리**
 
 > 사용자의 닉네임, 이메일, 포인트 조회
->
+
+```sql
+SELECT name, email, point
+FROM user
+WHERE id = 7;
+```
+ 
