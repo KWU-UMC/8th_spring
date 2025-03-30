@@ -1,0 +1,20 @@
+Endpoint: GET /api/missions/in-progress
+Request Header:
+  - Authorization: Bearer {access_token}
+Query String:
+  - page: 0
+  - size: 10
+Response:
+  {
+    "missions": [
+      {
+        "user_mission_id": 1,
+        "mission_id": 1,
+        "title": "서울 미션1",
+        "description": "서울에서 첫 번째 미션입니다.",
+        "points_reward": 100,
+        "region_name": "서울"
+      },
+      ...
+    ]
+  }

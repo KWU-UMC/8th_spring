@@ -1,0 +1,15 @@
+Endpoint: POST /api/users/signup
+Request Header:
+  - Content-Type: application/json
+Request Body:
+  {
+    "username": "홍길동",
+    "email": "hong@example.com",
+    "password": "password123"
+  }
+Response:
+  {
+    "success": true,
+    "user_id": 1,
+    "message": "회원가입이 완료되었습니다."
+  }

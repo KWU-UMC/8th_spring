@@ -1,0 +1,24 @@
+Endpoint: GET /api/missions/home
+Request Header:
+  - Authorization: Bearer {access_token}
+Query String:
+  - region_id: 1
+  - page: 0
+  - size: 10
+Response:
+  {
+    "user_info": {
+      "username": "홍길동",
+      "points": 1200
+    },
+    "missions": [
+      {
+        "mission_id": 1,
+        "title": "서울 미션1",
+        "description": "서울에서 첫 번째 미션입니다.",
+        "points_reward": 100,
+        "region_name": "서울"
+      },
+      ...
+    ]
+  }

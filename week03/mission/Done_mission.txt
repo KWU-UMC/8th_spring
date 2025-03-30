@@ -1,0 +1,21 @@
+Endpoint: GET /api/missions/completed
+Request Header:
+  - Authorization: Bearer {access_token}
+Query String:
+  - page: 0
+  - size: 10
+Response:
+  {
+    "missions": [
+      {
+        "user_mission_id": 2,
+        "mission_id": 2,
+        "title": "서울 미션2",
+        "description": "서울에서 두 번째 미션입니다.",
+        "points_reward": 150,
+        "completed_at": "2025-03-20T14:00:00",
+        "region_name": "서울"
+      },
+      ...
+    ]
+  }
