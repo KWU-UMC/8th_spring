@@ -58,5 +58,5 @@
 }
 - Request Header: content-type: application/json
 - Query String: 새로운 데이터를 생성하는 것이므로 필요하지 않음
-- Path Variable: 새로운 데이터를 생성하는 것이므로 필요하지 않음
+- Path Variable: 새로운 데이터를 생성하는 것이므로 필요하지 않음 
 
