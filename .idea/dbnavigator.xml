@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DBNavigator.Project.CodeGeneratorManager">
+    <generator-states>
+      <generator-state category="JAVA" />
+    </generator-states>
+  </component>
   <component name="DBNavigator.Project.DDLFileAttachmentManager">
     <mappings />
     <preferences />
@@ -12,6 +17,9 @@
   <component name="DBNavigator.Project.DatabaseAssistantManager">
     <assistants>
       <assistant-state connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" default-profile-name="" selected-profile-name="" selected-model-name="" assistant-type="GENERIC" selected-action="SHOW_SQL" availability="UNAVAILABLE" acknowledgement="NONE">
+        <messages />
+      </assistant-state>
+      <assistant-state connection-id="f60076fe-7179-4ecc-b280-925ed3eef490" default-profile-name="" selected-profile-name="" selected-model-name="" assistant-type="GENERIC" selected-action="SHOW_SQL" availability="UNAVAILABLE" acknowledgement="NONE">
         <messages />
       </assistant-state>
     </assistants>
@@ -120,7 +128,53 @@ REFERENCES store (id);
 ALTER TABLE store 
 ADD CONSTRAINT FK_region_TO_store_1 FOREIGN KEY (region_id) 
 REFERENCES region (id);]]></console>
-      <console name="Chapter2" type="STANDARD" schema="mysql" session="Main"><![CDATA[SELECT *
+      <console name="Chapter2" type="STANDARD" schema="umc_db" session="Main"><![CDATA[-- 1. region
+INSERT INTO region (id, region_name)
+VALUES (1, '서울'), (2, '부산');
+
+-- 2. store
+INSERT INTO store (id, region_id, store_name, store_address)
+VALUES 
+(1, 1, '김밥천국', '서울 강남구 어딘가'),
+(2, 1, '백반집', '서울 강서구 어딘가');
+
+-- 3. user
+INSERT INTO user (id, name, gender, birth, address, email, point)
+VALUES 
+(1, '김희지', '여', '2003-11-28', '경기도 동두천시', 'nitej394', 0);
+
+-- 4. genre
+INSERT INTO genre (id, name)
+VALUES (1, '한식'), (2, '양식');
+
+-- 5. user_genre
+INSERT INTO user_genre (user_id, genre_id)
+VALUES (7, 1), (7, 2);
+
+-- 6. mission
+INSERT INTO mission (id, store_id, name, description)
+VALUES 
+(1, 1, '제육 정식 먹기', '김밥천국에서 제육 정식 먹어보기'),
+(2, 1, '돈까스 도전', '김밥천국에서 돈까스 먹기'),
+(3, 2, '백반 메뉴 먹기', '백반집에서 대표 메뉴 먹기');
+
+-- 7. user_mission
+INSERT INTO user_mission (user_id, mission_id, status, created_at, updated_at)
+VALUES 
+(7, 1, '진행중'),
+(7, 2, '진행완료');
+
+-- 8. review
+INSERT INTO review (user_id, store_id, score, description)
+VALUES (
+7, 
+1,                                           
+'5',                                        
+'음 너무 맛있어요 포인트도 얻고 맛있는 맛집도 알게 된 것 같아 너무나도 행복한 식사였답니다. 다음에 또 올게요!!'
+);
+
+
+SELECT *
 FROM mission as m
 JOIN user_mission AS um ON m.id = um.mission_id
 WHERE um.user_id = 7
@@ -129,15 +183,7 @@ ORDER BY um.created_at desc, m.id desc limit 15;
 LIMIT 15 OFFSET 0;
 --내가 진행중, 진행 완료한 미션 모아서 보는 쿼리(페이징 포함)
 
-INSERT INTO review (user_id, store_id, score, description)
-VALUES (
-(SELECT id FROM user WHERE name = '닉네임1234'), 
-1,                                           
-'5',                                        
-'음 너무 맛있어요 포인트도 얻고 맛있는 맛집도 알게 된 것 같아 너무나도 행복한 식사였답니다. 다음에 또 올게요!!'                
-);
---리뷰 작성하는 쿼리,
---* 사진의 경우는 일단 배제
+
 
 SELECT m.*, s.store_name 
 FROM mission AS m
@@ -155,6 +201,126 @@ SELECT name, email, point
 FROM user
 WHERE id = 7;
 -- 마이페이지 화면 쿼리]]></console>
+      <console name="Connection" type="STANDARD" schema="mysql" session="Main"><![CDATA[CREATE DATABASE IF NOT EXISTS umc_db;
+
+USE umc_db;
+
+CREATE TABLE user (
+    id BIGINT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    gender VARCHAR(10) NULL,
+    birthdate DATE NULL,
+    address VARCHAR(100) NULL,
+    email VARCHAR(30) NULL,
+    created_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    point INT NULL,
+    CONSTRAINT PK_USER PRIMARY KEY (id)
+);
+
+CREATE TABLE mission (
+    id BIGINT NOT NULL,
+    store_id BIGINT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    description VARCHAR(50) NULL,
+    CONSTRAINT PK_MISSION PRIMARY KEY (id, store_id)
+);
+
+CREATE TABLE genre (
+    id BIGINT NOT NULL,
+    name VARCHAR(36) NOT NULL,
+    CONSTRAINT PK_GENRE PRIMARY KEY (id)
+);
+
+CREATE TABLE user_genre (
+    user_id BIGINT NOT NULL,
+    genre_id BIGINT NOT NULL,
+    CONSTRAINT PK_USER_GENRE PRIMARY KEY (user_id, genre_id)
+);
+
+CREATE TABLE user_mission (
+    user_id BIGINT NOT NULL,
+    mission_id BIGINT NOT NULL,
+    status VARCHAR(15) NOT NULL,
+    created_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    CONSTRAINT PK_USER_MISSION PRIMARY KEY (user_id, mission_id)
+);
+
+CREATE TABLE review (
+    user_id BIGINT NOT NULL,
+    store_id BIGINT NOT NULL,
+    score VARCHAR(10) NULL,
+    description VARCHAR(500) NULL,
+    photo_url VARCHAR(255) NULL,
+    CONSTRAINT PK_REVIEW PRIMARY KEY (user_id, store_id)
+);
+
+CREATE TABLE region (
+    id BIGINT NOT NULL,
+    region_name VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_REGION PRIMARY KEY (id)
+);
+
+CREATE TABLE store (
+    id BIGINT NOT NULL,
+    region_id BIGINT NOT NULL,
+    store_name VARCHAR(20) NOT NULL,
+    store_address VARCHAR(100) NULL,
+    CONSTRAINT PK_STORE PRIMARY KEY (id, region_id)
+);
+
+ALTER TABLE mission 
+ADD CONSTRAINT FK_store_TO_mission_1 FOREIGN KEY (store_id) 
+REFERENCES store (id);
+
+ALTER TABLE user_genre 
+ADD CONSTRAINT FK_user_TO_user_genre_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE user_genre 
+ADD CONSTRAINT FK_genre_TO_user_genre_1 FOREIGN KEY (genre_id) 
+REFERENCES genre (id);
+
+ALTER TABLE user_mission 
+ADD CONSTRAINT FK_user_TO_user_mission_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE user_mission 
+ADD CONSTRAINT FK_mission_TO_user_mission_1 FOREIGN KEY (mission_id) 
+REFERENCES mission (id);
+
+ALTER TABLE review 
+ADD CONSTRAINT FK_user_TO_review_1 FOREIGN KEY (user_id) 
+REFERENCES user (id);
+
+ALTER TABLE review 
+ADD CONSTRAINT FK_store_TO_review_1 FOREIGN KEY (store_id) 
+REFERENCES store (id);
+
+ALTER TABLE store 
+ADD CONSTRAINT FK_region_TO_store_1 FOREIGN KEY (region_id) 
+REFERENCES region (id);]]></console>
+      <console name="test_data" type="STANDARD" schema="umc_db" session="Main"><![CDATA[SELECT *
+FROM mission as m
+JOIN user_mission AS um ON m.id = um.mission_id
+WHERE um.user_id = 7
+AND(um.status = '진행중' OR um.status = '진행완료')
+ORDER BY um.created_at desc, m.id desc
+LIMIT 15 OFFSET 0;
+# 내가 진행중, 진행 완료한 미션 모아서 보는 쿼리(페이징 포함)]]></console>
+    </connection>
+    <connection id="edcdfa58-701e-40d2-b78d-d86c1aba1c0d">
+      <console name="UMC" type="STANDARD" schema="mysql" session="Main" />
+    </connection>
+    <connection id="f60076fe-7179-4ecc-b280-925ed3eef490">
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+    </connection>
+    <connection id="f95ee5c3-69b8-4418-805d-08058f626211">
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+    </connection>
+    <connection id="efeec781-e6db-4e8d-8d24-976f3a82c52e">
+      <console name="Connection 3" type="STANDARD" schema="mysql" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -162,12 +328,17 @@ WHERE id = 7;
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter1" />
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/test_data" />
       <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter2" />
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Connection" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" />
+    <connection id="edcdfa58-701e-40d2-b78d-d86c1aba1c0d" />
+    <connection id="f60076fe-7179-4ecc-b280-925ed3eef490" />
+    <connection id="f95ee5c3-69b8-4418-805d-08058f626211" />
+    <connection id="efeec781-e6db-4e8d-8d24-976f3a82c52e" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" dataset="mysql.genre" active-filter-id="" />
@@ -183,13 +354,119 @@ WHERE id = 7;
     <filters />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
-    <recently-used-interfaces />
+    <recently-used-interfaces>
+      <mapping database-type="MYSQL" interface-id="DEFAULT" />
+    </recently-used-interfaces>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
       <connection id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" active="true" signed="true">
         <database>
           <name value="Connection" />
+          <description value="" />
+          <database-type value="MYSQL" />
+          <config-type value="BASIC" />
+          <database-version value="8.0" />
+          <driver-source value="BUNDLED" />
+          <driver-library value="" />
+          <driver value="" />
+          <url-type value="DATABASE" />
+          <host value="localhost" />
+          <port value="3306" />
+          <database value="mysql" />
+          <tns-folder value="" />
+          <tns-profile value="" />
+          <type value="USER_PASSWORD" />
+          <user value="root" />
+          <token-type value="" />
+          <token-config-file value="" />
+          <token-profile value="" />
+          <session-user value="root@localhost" />
+        </database>
+        <properties>
+          <auto-commit value="true" />
+          <properties>
+            <property key="umc" value="" />
+          </properties>
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+        </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
+        <details>
+          <charset value="UTF-8" />
+          <session-management value="true" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
+          <restore-workspace-deep value="false" />
+          <environment-type value="default" />
+          <connectivity-timeout value="30" />
+          <idle-time-to-disconnect value="30" />
+          <idle-time-to-disconnect-pool value="5" />
+          <credential-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+        </details>
+        <debugger>
+          <compile-dependencies value="true" />
+          <tcp-driver-tunneling value="false" />
+          <tcp-host-address value="" />
+          <tcp-port-from value="4000" />
+          <tcp-port-to value="4999" />
+          <debugger-type value="ASK" />
+        </debugger>
+        <object-filters hide-empty-schemas="true" hide-pseudo-columns="false" hide-audit-columns="false">
+          <object-filters />
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED_VIEW" enabled="true" />
+            <object-type name="NESTED_TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="DATASET_TRIGGER" enabled="true" />
+            <object-type name="DATABASE_TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="JAVA_CLASS" enabled="true" />
+            <object-type name="JAVA_INNER_CLASS" enabled="true" />
+            <object-type name="JAVA_FIELD" enabled="true" />
+            <object-type name="JAVA_METHOD" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+            <object-type name="CREDENTIAL" enabled="true" />
+            <object-type name="AI_PROFILE" enabled="true" />
+          </object-type-filter>
+        </object-filters>
+      </connection>
+      <connection id="edcdfa58-701e-40d2-b78d-d86c1aba1c0d" active="true" signed="true">
+        <database>
+          <name value="UMC" />
           <description value="" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />
@@ -251,7 +528,310 @@ WHERE id = 7;
           <tcp-port-to value="4999" />
           <debugger-type value="ASK" />
         </debugger>
-        <object-filters hide-empty-schemas="true" hide-pseudo-columns="false" hide-audit-columns="false">
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+          <object-filters />
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED_VIEW" enabled="true" />
+            <object-type name="NESTED_TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="DATASET_TRIGGER" enabled="true" />
+            <object-type name="DATABASE_TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="JAVA_CLASS" enabled="true" />
+            <object-type name="JAVA_INNER_CLASS" enabled="true" />
+            <object-type name="JAVA_FIELD" enabled="true" />
+            <object-type name="JAVA_METHOD" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+            <object-type name="CREDENTIAL" enabled="true" />
+            <object-type name="AI_PROFILE" enabled="true" />
+          </object-type-filter>
+        </object-filters>
+      </connection>
+      <connection id="f60076fe-7179-4ecc-b280-925ed3eef490" active="true" signed="true">
+        <database>
+          <name value="Connection 1" />
+          <description value="" />
+          <database-type value="MYSQL" />
+          <config-type value="BASIC" />
+          <database-version value="9999.0" />
+          <driver-source value="BUNDLED" />
+          <driver-library value="" />
+          <driver value="" />
+          <url-type value="DATABASE" />
+          <host value="localhost" />
+          <port value="3306" />
+          <database value="mysql" />
+          <tns-folder value="" />
+          <tns-profile value="" />
+          <type value="USER_PASSWORD" />
+          <user value="" />
+          <token-type value="" />
+          <token-config-file value="" />
+          <token-profile value="" />
+          <session-user value="" />
+        </database>
+        <properties>
+          <auto-commit value="false" />
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+        </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
+        <details>
+          <charset value="UTF-8" />
+          <session-management value="true" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
+          <restore-workspace-deep value="false" />
+          <environment-type value="default" />
+          <connectivity-timeout value="30" />
+          <idle-time-to-disconnect value="30" />
+          <idle-time-to-disconnect-pool value="5" />
+          <credential-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+        </details>
+        <debugger>
+          <compile-dependencies value="true" />
+          <tcp-driver-tunneling value="false" />
+          <tcp-host-address value="" />
+          <tcp-port-from value="4000" />
+          <tcp-port-to value="4999" />
+          <debugger-type value="ASK" />
+        </debugger>
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+          <object-filters />
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED_VIEW" enabled="true" />
+            <object-type name="NESTED_TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="DATASET_TRIGGER" enabled="true" />
+            <object-type name="DATABASE_TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="JAVA_CLASS" enabled="true" />
+            <object-type name="JAVA_INNER_CLASS" enabled="true" />
+            <object-type name="JAVA_FIELD" enabled="true" />
+            <object-type name="JAVA_METHOD" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+            <object-type name="CREDENTIAL" enabled="true" />
+            <object-type name="AI_PROFILE" enabled="true" />
+          </object-type-filter>
+        </object-filters>
+      </connection>
+      <connection id="f95ee5c3-69b8-4418-805d-08058f626211" active="true" signed="true">
+        <database>
+          <name value="Connection 2" />
+          <description value="" />
+          <database-type value="MYSQL" />
+          <config-type value="BASIC" />
+          <database-version value="9999.0" />
+          <driver-source value="BUNDLED" />
+          <driver-library value="" />
+          <driver value="" />
+          <url-type value="DATABASE" />
+          <host value="localhost" />
+          <port value="3306" />
+          <database value="mysql" />
+          <tns-folder value="" />
+          <tns-profile value="" />
+          <type value="USER_PASSWORD" />
+          <user value="" />
+          <token-type value="" />
+          <token-config-file value="" />
+          <token-profile value="" />
+          <session-user value="" />
+        </database>
+        <properties>
+          <auto-commit value="false" />
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+        </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
+        <details>
+          <charset value="UTF-8" />
+          <session-management value="true" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
+          <restore-workspace-deep value="false" />
+          <environment-type value="default" />
+          <connectivity-timeout value="30" />
+          <idle-time-to-disconnect value="30" />
+          <idle-time-to-disconnect-pool value="5" />
+          <credential-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+        </details>
+        <debugger>
+          <compile-dependencies value="true" />
+          <tcp-driver-tunneling value="false" />
+          <tcp-host-address value="" />
+          <tcp-port-from value="4000" />
+          <tcp-port-to value="4999" />
+          <debugger-type value="ASK" />
+        </debugger>
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+          <object-filters />
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED_VIEW" enabled="true" />
+            <object-type name="NESTED_TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="DATASET_TRIGGER" enabled="true" />
+            <object-type name="DATABASE_TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="JAVA_CLASS" enabled="true" />
+            <object-type name="JAVA_INNER_CLASS" enabled="true" />
+            <object-type name="JAVA_FIELD" enabled="true" />
+            <object-type name="JAVA_METHOD" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+            <object-type name="CREDENTIAL" enabled="true" />
+            <object-type name="AI_PROFILE" enabled="true" />
+          </object-type-filter>
+        </object-filters>
+      </connection>
+      <connection id="efeec781-e6db-4e8d-8d24-976f3a82c52e" active="true" signed="true">
+        <database>
+          <name value="Connection 3" />
+          <description value="" />
+          <database-type value="MYSQL" />
+          <config-type value="BASIC" />
+          <database-version value="9999.0" />
+          <driver-source value="BUNDLED" />
+          <driver-library value="" />
+          <driver value="" />
+          <url-type value="DATABASE" />
+          <host value="localhost" />
+          <port value="3306" />
+          <database value="mysql" />
+          <tns-folder value="" />
+          <tns-profile value="" />
+          <type value="USER_PASSWORD" />
+          <user value="" />
+          <token-type value="" />
+          <token-config-file value="" />
+          <token-profile value="" />
+          <session-user value="" />
+        </database>
+        <properties>
+          <auto-commit value="false" />
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+        </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
+        <details>
+          <charset value="UTF-8" />
+          <session-management value="true" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
+          <restore-workspace-deep value="false" />
+          <environment-type value="default" />
+          <connectivity-timeout value="30" />
+          <idle-time-to-disconnect value="30" />
+          <idle-time-to-disconnect-pool value="5" />
+          <credential-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+        </details>
+        <debugger>
+          <compile-dependencies value="true" />
+          <tcp-driver-tunneling value="false" />
+          <tcp-host-address value="" />
+          <tcp-port-from value="4000" />
+          <tcp-port-to value="4999" />
+          <debugger-type value="ASK" />
+        </debugger>
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
           <object-filters />
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />
