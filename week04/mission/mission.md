@@ -1,0 +1,2 @@
+[https://velog.io/@danha/서블릿Servlet-vs-Spring-MVC](https://velog.io/@danha/%EC%84%9C%EB%B8%94%EB%A6%BFServlet-vs-Spring-MVC)
+[https://velog.io/@danha/Spring-AOP란](https://velog.io/@danha/Spring-AOP%EB%9E%80)
