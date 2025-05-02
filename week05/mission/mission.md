@@ -196,3 +196,9 @@ public class Review {
 **결과**
 
 ![JPADB](JPADB.png)
+
+> **github 링크**
+>
+>
+> https://github.com/DwKwCs/UMC_study_JPA_DB/tree/mission_05
+>
