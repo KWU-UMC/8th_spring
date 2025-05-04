@@ -1,0 +1,115 @@
+1. Domain
+정의
+
+소프트웨어가 해결하고자 하는 실제 비즈니스 문제 영역을 뜻합니다.
+
+특히 DDD(Domain-Driven Design) 관점에서는 도메인 모델(Entity, Value Object, Aggregate 등)로 표현됩니다.
+
+속성
+
+Entity: 식별자를 가지며 상태 변화 추적이 필요한 객체 (예: Member, Order)
+
+Value Object: 식별자가 없고 불변(immutable)한 객체 (예: Address, Money)
+
+Aggregate: 연관 있는 여러 Entity/Value Object를 하나의 변경 단위로 묶은 경계(경계를 이루는 루트 Entity가 Aggregate Root)
+
+Repository: 도메인 객체의 저장소 역할, CRUD 책임
+
+장점
+
+비즈니스 로직과 개념을 코드에 충실히 반영 → 유지보수·확장성 향상
+
+핵심 개념(Entities, VO, Aggregates 등)을 명확히 분리 → 설계 의도 명료화
+
+단점
+
+초기 학습 비용이 높음 (DDD 개념 익히기)
+
+작은 프로젝트에는 과설계(Over-Engineering) 위험
+
+---
+
+2. 양방향 매핑 (Bidirectional Mapping)
+정의
+
+두 엔티티가 서로를 참조하도록 JPA 어노테이션으로 설정하는 방식
+
+예: Member ←→ Review 일 때, Review 엔티티에 @ManyToOne Member member가 있고,
+Member 엔티티에 @OneToMany(mappedBy="member") List<Review> reviewList가 있는 구조
+
+속성
+
+mappedBy 속성: 연관관계의 주체(외래 키 소유자)를 지정
+
+주인(Owner): 외래 키를 실제로 관리하는 쪽(@ManyToOne이 있는 쪽)
+
+주인이 아닌 쪽(Inverse): mappedBy로만 참조
+
+장점
+
+서로 양방향으로 객체 그래프 탐색 가능 → 편리한 코드 작성
+
+영속화(cascade)나 고아 객체 삭제(orphanRemoval) 설정을 Aggregate 단위로 조절 가능
+
+단점
+
+순환 참조에 의한 무한 루프 위험 (JSON 직렬화 등) → @JsonIgnore, DTO 변환 필요
+
+연관관계 관리 책임이 분산 → 양쪽에 값을 설정(setBothSides)해 줘야 함
+
+잘못된 mappedBy나 누락된 양쪽 세팅 시, DB 무결성 깨질 수 있음
+
+---
+
+3. N + 1 문제
+정의
+
+JPA에서 **지연 로딩(Lazy Loading)**된 컬렉션을 순회할 때,
+1개의 메인 조회 쿼리(N) 이후 각 연관 엔티티를 추가로 1번씩 조회(총 N + 1번)하는 성능 병목 현상
+
+발생 예시
+
+sql
+복사
+편집
+SELECT * FROM member;                  -- 1번
+SELECT * FROM review WHERE member_id=?; -- 각 member마다 1번씩
+해결 방법
+
+Fetch Join
+
+java
+복사
+편집
+SELECT m FROM Member m JOIN FETCH m.reviewList
+EntityGraph
+
+java
+복사
+편집
+@EntityGraph(attributePaths = "reviewList")
+List<Member> findAll();
+배치 사이즈 조정 (hibernate.default_batch_fetch_size)
+
+@Fetch(FetchMode.SUBSELECT) (Hibernate 전용)
+
+장점
+
+Fetch Join/EntityGraph 사용 시 한 번의 조인 쿼리로 다수 연관 엔티티 로딩 가능 → DB 왕복 최소화
+
+배치 사이즈 설정으로 Lazy 로딩 시에도 그룹핑된 쿼리로 조회
+
+단점
+
+대량 조인 시 Cartesian Product 발생 위험 → 메모리 폭발
+
+Fetch Join은 깊은 중첩 관계에선 한계 → DB 스키마·쿼리 최적화 신중히 설계 필요
+
+배치 사이즈 과도 설정 시 불필요한 객체 할당 증가
+
+---
+
+4.JPA
+JPA(Java Persistence API)란, 자바 진영에서 ORM(Object-Relational Mapping) 기술의 표준으로 사용되는 인터페이스의 모음.
+ORM은 애ㅐ플리케이션의 객체를 RDB 클래스에 자동으로 연결.
+---
