@@ -1,0 +1,18 @@
+- **지연로딩과 즉시로딩의 차이**
+    - **지연로딩 (LAZY)**: 엔티티 조회 시 연관 객체는 바로 로딩하지 않고, 실제 사용할 때 DB에서 가져옴 (프록시 객체 사용).
+    - **즉시로딩 (EAGER)**: 엔티티를 조회할 때 연관 객체도 **함께** 즉시 조회 (쿼리 N+1 문제 발생 가능).
+- **Fetch Join**
+    - JPQL에서 사용되는 **조인 전략**으로, 연관된 엔티티를 **한 번의 쿼리로 함께 조회**할 수 있음.
+    - `select m from Member m join fetch m.team` 형태로 사용.
+    - 이 쿼리는 `Member`와 연관된 `Team`을 **한 번에 join해서 조회**
+    - 쿼리 결과는 한 번이고, 연관 엔티티가 즉시 초기화되어 **N+1 문제 없음**
+- **@EntityGraph**
+    - JPA가 제공하는 어노테이션으로, **쿼리 메서드에 Fetch 전략을 지정**해 N+1 문제를 방지.
+    - JPQL 없이도 `@EntityGraph(attributePaths = {"team"})`로 fetch join과 유사한 효과 가능.
+- **JPQL**
+    - SQL과 비슷하지만 **엔티티와 그 필드를 기준으로 작성**.
+    - `select m from Member m where m.name = :name` 형태로 사용.
+    - DB에 독립적인 쿼리를 작성할 수 있음.
+- **QueryDSL**
+    - 타입 안전한 JPQL 빌더 도구로, **코드로 쿼리를 생성**하며 컴파일 시점에 오류 잡기 가능.
+    - `QMember.member.name.eq("홍길동")` 형태로 직관적이고 유지보수 쉬움.

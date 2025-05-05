@@ -1,0 +1,2 @@
+https://github.com/kimdanha/UMC8th_project/tree/feature/week6
+https://velog.io/@danha/JPA-QueryDSL-%EC%84%B1%EB%8A%A5-%EB%B3%91%EB%AA%A9-%EB%B6%84%EC%84%9D%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94-%EC%A0%84%EB%9E%B5
