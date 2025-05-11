@@ -1,0 +1,6 @@
+- RestContollerAdvice
+    - **설명**: 컨트롤러 전역에서 발생하는 예외를 한 곳에서 처리하는 기능을 제공하는 어노테이션
+    - **장점**: try-catch를 반복하지 않아도 되고, 예외 응답 형식을 통일시킬 수 있음
+- lombok
+    - **설명**: 자바 코드에서 `getter`, `setter`, `constructor`, `toString` 등의 반복 코드를 자동 생성해주는 라이브러리
+    - **장점**: 코드가 간결해지고, 생산성과 가독성이 향상됨 (`@Getter`, `@Builder`, `@NoArgsConstructor` 등 사용)
