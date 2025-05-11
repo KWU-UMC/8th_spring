@@ -1,4 +1,5 @@
 https://github.com/kimdanha/UMC8th_project
+https://velog.io/@danha/Spring-Boot-%EC%97%90%EB%9F%AC%EB%A5%BC-%EB%94%94%EC%8A%A4%EC%BD%94%EB%93%9C%EB%A1%9C-%EC%9E%90%EB%8F%99-%EC%A0%84%EC%86%A1%ED%95%98%EA%B8%B0
 
 RestControllerAdvice의 장점
 
