@@ -13,7 +13,7 @@
 #### RestControllerAdvice가 없을 때 불편한 점
 - 컨트롤러마다 try-catch를 반복해 중복 코드가 많아지고 유지보수가 어려워짐
 - 공통 처리가 어려워 로깅, 응답 구조 통일 등을 매번 수작업해야함
-- 에러 응답 포맷이 일관되지 않아 프론트가 헷갈림
+- 에러 응답 포맷이 일관되지 않아 프론트가 헷갈림 
 
 ### ControllerAdvice
 - @ExceptionHandler, @ModelAttribute, @InitBinder가 적용된 메소드들에 AOP를 적용하여 Controller단에 적용하기 위해 고안된 어노테이션
