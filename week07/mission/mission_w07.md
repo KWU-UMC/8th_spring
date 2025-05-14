@@ -3,7 +3,13 @@
 >
 > https://github.com/heexji/umc_spring/tree/mission7
 >
-  ## RestControllerAdvice의 장점
+
+## 실행결과
+1. ![7주차 실습1.png](7%EC%A3%BC%EC%B0%A8%20%EC%8B%A4%EC%8A%B51.png)
+2.  ![7주차 실습2.png](7%EC%A3%BC%EC%B0%A8%20%EC%8B%A4%EC%8A%B52.png)
+3. ![7주차 실습3.png](7%EC%A3%BC%EC%B0%A8%20%EC%8B%A4%EC%8A%B53.png)
+
+## RestControllerAdvice의 장점
 
   API 전역에서 발생하는 예외를 하나의 클래스에서 처리할 수 있다.
 
