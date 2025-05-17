@@ -1,0 +1,17 @@
+- ## java의 Exception 종류들
+    - **Checked Exception**
+        - 컴파일 타임에 체크되며, 반드시 try-catch로 처리하거나 throws로 명시해야 함.
+        - 대표 예시: IOException, SQLException, FileNotFoundException
+        - 외부 자원(파일, 네트워크 등)과 관련된 예외에서 주로 발생함.
+    - **Unchecked Exception**
+        - 런타임 시 발생하며, 컴파일러가 강제하지 않음.
+        - 대표 예시: NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException
+        - 개발자 실수나 논리적 오류로 인해 발생하는 경우가 많음.
+    - **Error**
+        - 시스템 레벨의 심각한 오류로, 일반적인 애플리케이션 코드에서 처리하지 않음.
+        - 대표 예시: OutOfMemoryError, StackOverflowError
+        - 복구가 불가능한 상황이므로 catch 블록에서 다루지 않는 것이 일반적임.
+- ## @Valid
+- @Valid는 Spring MVC에서 요청 객체의 유효성 검사를 수행할 때 사용되는 애너테이션
+- 컨트롤러의 파라미터 앞에 붙이면, DTO 내 필드에 설정된 제약조건(예: @NotNull, @Size)을 자동으로 검증
+- 유효성 검사를 통과하지 못하면 MethodArgumentNotValidException이 발생하며, 이를 통해 에러 메시지를 처리
