@@ -1,0 +1,8 @@
+- java의 Exception 종류들
+    - **Checked Exception**: 컴파일 타임에 처리해야 하는 예외 (예: `IOException`, `SQLException`).
+    - **Unchecked Exception (RuntimeException)**: 실행 중 발생하는 예외로, 컴파일 타임에 처리하지 않아도 되는 예외 (예: `NullPointerException`, `ArrayIndexOutOfBoundsException`).
+    - **Error**: 시스템 수준의 심각한 오류로, 보통 처리하지 않음 (예: `OutOfMemoryError`).
+- @Valid
+    - **목적**: Spring에서 **DTO 유효성 검사**를 자동으로 수행.
+    - **사용법**: 객체에 `@Valid`를 사용하면 해당 객체의 필드에 정의된 유효성 조건(`@NotBlank`, `@Size` 등)을 검사.
+    - **예시**: `@RequestBody @Valid SignupRequestDto requestDto`로 유효성 검사.
