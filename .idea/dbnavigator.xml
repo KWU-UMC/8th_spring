@@ -329,8 +329,8 @@ LIMIT 15 OFFSET 0;
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
       <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Connection" />
-      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter2" />
       <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/test_data" />
+      <object connection-id="a8bb6bb9-a4a4-4159-bdc6-99537b87df9c" object-ref="consoles/Chapter2" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
