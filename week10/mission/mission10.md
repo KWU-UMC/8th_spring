@@ -34,7 +34,7 @@
 ### 로그인 시도 화면
 ![2번-로그인성공.png](../../../../Users/%EB%B0%95%EC%9D%80%EC%84%9C/Documents/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EB%B0%9B%EC%9D%80%20%ED%8C%8C%EC%9D%BC/2%EB%B2%88-%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%84%B1%EA%B3%B5.png)
 - 로그인 성공시 token이 출력됨을 확인할 수 있음
-- 해당 token을 헤더에 추가해 추가 API 요청 가능
+- 해당 token을 헤더에 추가해 추가 API 요청 가능 
 
 ### 로그아웃 요청 후 결과
 ![2번-로그아웃.png](../../../../Users/%EB%B0%95%EC%9D%80%EC%84%9C/Documents/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EB%B0%9B%EC%9D%80%20%ED%8C%8C%EC%9D%BC/2%EB%B2%88-%EB%A1%9C%EA%B7%B8%EC%95%84%EC%9B%83.png)
